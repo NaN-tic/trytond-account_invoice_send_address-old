@@ -11,5 +11,9 @@ msgid "Send invoice"
 msgstr "Enviar factures"
 
 msgctxt "help:party.address,send_invoice:"
-msgid "Indicates if the address will be used to send invoices."
-msgstr "Indica que l'adreça s'utilitzará per enviar les factures. "
+msgid "Indicates if the address will the one used to send invoices to."
+msgstr "Indica que l'adreça s'utilitzará per enviar les factures."
+
+msgctxt "help:account.invoice,send_address:"
+msgid "Address where the invoice will be sent to."
+msgstr "Adreça a la qual s'enviaran les factures."

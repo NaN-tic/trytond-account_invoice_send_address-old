@@ -10,9 +10,8 @@ __metaclass__ = PoolMeta
 
 class Address:
     __name__ = 'party.address'
-
-    send_invoice = fields.Boolean('Send invoice',
-        help='Indicates if the address will be used to send invoices.')
+    send_invoice = fields.Boolean('Send Invoice',
+        help='Indicates if the address will the one used to send invoices to.')
 
 
 class Invoice:
@@ -26,7 +25,8 @@ class Invoice:
             'readonly': Eval('state') != 'draft',
             'invisible': ~Eval('type').in_(['out_invoice', 'out_credit_note']),
             },
-        depends=['state', 'party', 'type'])
+        depends=['state', 'party', 'type'],
+        help="Address where the invoice will be sent to.")
 
     def on_change_party(self):
         changes = super(Invoice, self).on_change_party()
