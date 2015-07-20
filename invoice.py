@@ -37,6 +37,12 @@ class Invoice:
                 changes['send_address.rec_name'] = send_address.rec_name
         return changes
 
+    def _credit(self):
+        values = super(Invoice, self)._credit()
+        if self.send_address:
+            values['send_address'] = self.send_address.id
+        return values
+
 
 class Sale:
     __name__ = 'sale.sale'

@@ -119,6 +119,14 @@ Create party::
     >>> party.save()
     >>> address, = party.addresses
 
+Create payment term::
+
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> payment_term = PaymentTerm(name='Term')
+    >>> payment_term_line = payment_term.lines.new()
+    >>> payment_term_line.type = 'remainder'
+    >>> payment_term.save()
+
 Create invoice without send address::
 
     >>> Invoice = Model.get('account.invoice')
@@ -143,4 +151,14 @@ Create a send address and check it's used::
     >>> invoice.invoice_address == address
     True
     >>> invoice.send_address == send_address
+    True
+
+Credit invoice and check send address is copied::
+
+    >>> invoice.payment_term = payment_term
+    >>> invoice.save()
+    >>> credit = Wizard('account.invoice.credit', [invoice])
+    >>> credit.execute('credit')
+    >>> refund_invoice, = Invoice.find([('type', '=', 'out_credit_note')])
+    >>> refund_invoice.send_address == send_address
     True
