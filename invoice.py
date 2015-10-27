@@ -30,11 +30,14 @@ class Invoice:
 
     def on_change_party(self):
         changes = super(Invoice, self).on_change_party()
-        if self.party and self.type in ('out_invoice', 'out_credit_note'):
-            send_address = self.party.address_get(type='send_invoice')
-            if send_address:
-                changes['send_address'] = send_address.id
-                changes['send_address.rec_name'] = send_address.rec_name
+        if self.party:
+            if self.type in ('out_invoice', 'out_credit_note'):
+                send_address = self.party.address_get(type='send_invoice')
+                if send_address:
+                    changes['send_address'] = send_address.id
+                    changes['send_address.rec_name'] = send_address.rec_name
+            else:
+                changes['send_address'] = None
         return changes
 
     def _credit(self):
