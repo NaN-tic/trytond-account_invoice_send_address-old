@@ -29,16 +29,12 @@ class Invoice:
         help="Address where the invoice will be sent to.")
 
     def on_change_party(self):
-        changes = super(Invoice, self).on_change_party()
+        super(Invoice, self).on_change_party()
         if self.party:
             if self.type in ('out_invoice', 'out_credit_note'):
-                send_address = self.party.address_get(type='send_invoice')
-                if send_address:
-                    changes['send_address'] = send_address.id
-                    changes['send_address.rec_name'] = send_address.rec_name
+                self.send_address = self.party.address_get(type='send_invoice')
             else:
-                changes['send_address'] = None
-        return changes
+                self.send_address = None
 
     def _credit(self):
         values = super(Invoice, self)._credit()
