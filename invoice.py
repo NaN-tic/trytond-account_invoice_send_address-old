@@ -31,7 +31,7 @@ class Invoice:
     def on_change_party(self):
         super(Invoice, self).on_change_party()
         if self.party:
-            if self.type in ('out_invoice', 'out_credit_note'):
+            if self.type == 'out':
                 self.send_address = self.party.address_get(type='send_invoice')
             else:
                 self.send_address = None
@@ -46,7 +46,7 @@ class Invoice:
 class Sale:
     __name__ = 'sale.sale'
 
-    def _get_invoice_sale(self, invoice_type):
-        invoice = super(Sale, self)._get_invoice_sale(invoice_type)
+    def _get_invoice_sale(self):
+        invoice = super(Sale, self)._get_invoice_sale()
         invoice.send_address = self.party.address_get(type='send_invoice')
         return invoice

@@ -103,6 +103,6 @@ Credit invoice and check send address is copied::
     >>> invoice.save()
     >>> credit = Wizard('account.invoice.credit', [invoice])
     >>> credit.execute('credit')
-    >>> refund_invoice, = Invoice.find([('type', '=', 'out_credit_note')])
+    >>> refund_invoice, = Invoice.find([('id', '!=', invoice.id)])
     >>> refund_invoice.send_address == send_address
     True
