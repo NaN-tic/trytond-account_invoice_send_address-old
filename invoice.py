@@ -5,16 +5,17 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
 __all__ = ['Address', 'Invoice', 'Sale']
-__metaclass__ = PoolMeta
 
 
 class Address:
+    __metaclass__ = PoolMeta
     __name__ = 'party.address'
     send_invoice = fields.Boolean('Send Invoice',
         help='Indicates if the address will the one used to send invoices to.')
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     send_address = fields.Many2One('party.address', 'Send Address',
@@ -44,6 +45,7 @@ class Invoice:
 
 
 class Sale:
+    __metaclass__ = PoolMeta
     __name__ = 'sale.sale'
 
     def _get_invoice_sale(self):
