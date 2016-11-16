@@ -38,10 +38,9 @@ class Invoice:
                 self.send_address = None
 
     def _credit(self):
-        values = super(Invoice, self)._credit()
-        if self.send_address:
-            values['send_address'] = self.send_address.id
-        return values
+        credit = super(Invoice, self)._credit()
+        credit.send_address = self.send_address
+        return credit
 
 
 class Sale:
