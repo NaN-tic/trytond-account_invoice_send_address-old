@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# This file is part account_invoice_send_address module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 
@@ -11,6 +12,8 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
+MODULE = 'account_invoice_send_address'
+PREFIX = 'trytonspain'
 MODULE2PREFIX = {}
 
 
@@ -39,8 +42,6 @@ version = info.get('version', '0.0.1')
 major_version, minor_version, _ = version.split('.', 2)
 major_version = int(major_version)
 minor_version = int(minor_version)
-name = 'trytonspain_account_invoice_send_address'
-download_url = 'https://bitbucket.org/trytonspain/trytond-account_invoice_send_address'
 
 requires = []
 for dep in info.get('depends', []):
@@ -49,31 +50,28 @@ for dep in info.get('depends', []):
         requires.append(get_require_version('%s_%s' % (prefix, dep)))
 requires.append(get_require_version('trytond'))
 
-tests_require = [
-    get_require_version('proteus'),
-    get_require_version('trytond_sale'),
-    ]
+tests_require = [get_require_version('proteus')]
 dependency_links = []
 if minor_version % 2:
     # Add development index for testing with proteus
     dependency_links.append('https://trydevpi.tryton.org/')
 
-setup(name=name,
+setup(name='%s_%s' % (PREFIX, MODULE),
     version=version,
-    description='Tryton Account Invoice Send Address Module',
+    description='Tryton account_invoice_send_address Module',
     long_description=read('README'),
     author='TrytonSpain',
-    author_email='sergi@koolpi.com',
+    author_email='info@trytonspain.com',
     url='https://bitbucket.org/trytonspain/',
-    download_url=download_url,
+    download_url="https://bitbucket.org/trytonspain/trytond-%s" % MODULE,
     keywords='',
-    package_dir={'trytond.modules.account_invoice_send_address': '.'},
+    package_dir={'trytond.modules.%s' % MODULE: '.'},
     packages=[
-        'trytond.modules.account_invoice_send_address',
-        'trytond.modules.account_invoice_send_address.tests',
+        'trytond.modules.%s' % MODULE,
+        'trytond.modules.%s.tests' % MODULE,
         ],
     package_data={
-        'trytond.modules.account_invoice_send_address': (info.get('xml', [])
+        'trytond.modules.%s' % MODULE: (info.get('xml', [])
             + ['tryton.cfg', 'view/*.xml', 'locale/*.po', '*.odt',
                 'icons/*.svg', 'tests/*.rst']),
         },
@@ -85,14 +83,24 @@ setup(name=name,
         'Intended Audience :: Financial and Insurance Industry',
         'Intended Audience :: Legal Industry',
         'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Natural Language :: Bulgarian',
         'Natural Language :: Catalan',
+        'Natural Language :: Czech',
+        'Natural Language :: Dutch',
         'Natural Language :: English',
+        'Natural Language :: French',
+        'Natural Language :: German',
+        'Natural Language :: Hungarian',
+        'Natural Language :: Italian',
+        'Natural Language :: Portuguese (Brazilian)',
+        'Natural Language :: Russian',
+        'Natural Language :: Slovenian',
         'Natural Language :: Spanish',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Office/Business',
@@ -103,10 +111,13 @@ setup(name=name,
     zip_safe=False,
     entry_points="""
     [trytond.modules]
-    account_invoice_send_address = trytond.modules.account_invoice_send_address
-    """,
+    %s = trytond.modules.%s
+    """ % (MODULE, MODULE),
     test_suite='tests',
     test_loader='trytond.test_loader:Loader',
     tests_require=tests_require,
     use_2to3=True,
+    convert_2to3_doctests=[
+        'tests/scenario_account_invoice_send_address.rst',
+        ],
     )
