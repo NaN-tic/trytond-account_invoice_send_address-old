@@ -12,7 +12,7 @@ Imports::
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
-    ...     create_chart, get_accounts, create_tax, create_tax_code
+    ...     create_chart, get_accounts, create_tax
     >>> from trytond.modules.account_invoice.tests.tools import \
     ...     set_fiscalyear_invoice_sequences, create_payment_term
     >>> today = datetime.date.today()
@@ -44,17 +44,13 @@ Create chart of accounts::
 
 Create tax::
 
-    >>> TaxCode = Model.get('account.tax.code')
     >>> tax = create_tax(Decimal('.10'))
     >>> tax.save()
-    >>> invoice_base_code = create_tax_code(tax, 'base', 'invoice')
-    >>> invoice_base_code.save()
-    >>> invoice_tax_code = create_tax_code(tax, 'tax', 'invoice')
-    >>> invoice_tax_code.save()
-    >>> credit_note_base_code = create_tax_code(tax, 'base', 'credit')
-    >>> credit_note_base_code.save()
-    >>> credit_note_tax_code = create_tax_code(tax, 'tax', 'credit')
-    >>> credit_note_tax_code.save()
+
+Create payment term::
+
+    >>> payment_term = create_payment_term()
+    >>> payment_term.save()
 
 Create party::
 
@@ -64,6 +60,19 @@ Create party::
     >>> send_address.send_invoice = True
     >>> party.save()
     >>> address, send_address = party.addresses
+
+Create account categories::
+
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = expense
+    >>> account_category.account_revenue = revenue
+    >>> account_category.save()
+
+    >>> account_category_tax, = account_category.duplicate()
+    >>> account_category_tax.supplier_taxes.append(tax)
+    >>> account_category_tax.save()
 
 Create product::
 
@@ -76,18 +85,13 @@ Create product::
     >>> template.default_uom = unit
     >>> template.type = 'service'
     >>> template.list_price = Decimal('40')
-    >>> template.account_expense = expense
-    >>> template.account_revenue = revenue
+    >>> template.account_category = account_category_tax
     >>> template.salable = True
     >>> product, = template.products
     >>> product.cost_price = Decimal('25')
     >>> template.save()
     >>> product, = template.products
 
-Create payment term::
-
-    >>> payment_term = create_payment_term()
-    >>> payment_term.save()
 
 Create a sale and check send address is assigned on invoice::
 
