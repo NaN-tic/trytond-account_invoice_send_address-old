@@ -15,7 +15,6 @@ class Address(metaclass=PoolMeta):
 
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
-
     send_address = fields.Many2One('party.address', 'Send Address',
         domain=[
             ('party', '=', Eval('party')),
@@ -36,8 +35,8 @@ class Invoice(metaclass=PoolMeta):
             else:
                 self.send_address = None
 
-    def _credit(self):
-        credit = super(Invoice, self)._credit()
+    def _credit(self, **values):
+        credit = super(Invoice, self)._credit(**values)
         credit.send_address = self.send_address
         return credit
 
